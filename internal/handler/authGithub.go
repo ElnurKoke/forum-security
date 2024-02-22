@@ -13,7 +13,7 @@ import (
 var githubOAuthConfig = oauth2{
 	ClientID:     "961979141895b40b95d0",
 	ClientSecret: "356cfa2cedd31ffae057c1e1c243f01e27513636",
-	RedirectURL:  "http://localhost:8080/auth/github/callback",
+	RedirectURL:  "https://localhost:8080/auth/github/callback",
 	AuthURL:      "https://github.com/login/oauth/authorize",
 	TokenURL:     "https://github.com/login/oauth/access_token",
 	UserInfoURL:  "https://api.github.com/user",
@@ -27,7 +27,7 @@ func (h *Handler) githubLogin(w http.ResponseWriter, r *http.Request) {
 	redirectURL := fmt.Sprintf(
 		"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s",
 		githubClientID,
-		"http://localhost:8080/login/github/callback")
+		"https://localhost:8080/login/github/callback")
 
 	http.Redirect(w, r, redirectURL, http.StatusMovedPermanently)
 }

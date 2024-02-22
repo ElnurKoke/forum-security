@@ -1,5 +1,8 @@
 .SILENT:
 
+test:
+	go test ./test
+
 run:
 	go run ./cmd/main.go
 

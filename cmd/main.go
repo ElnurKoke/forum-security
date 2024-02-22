@@ -14,6 +14,10 @@ func main() {
 	services := service.NewService(store)
 	handlers := handler.NewHandler(services)
 	handlers.InitRoutes()
-	log.Println("Running a web server on http://localhost:8080")
-	http.ListenAndServe(":8080", handlers.Mux)
+	log.Println("Running a web server on https://localhost:8080")
+	// http.ListenAndServe(":8080", handlers.Mux)
+	err := http.ListenAndServeTLS(":8080", "secure/server.crt", "secure/server.key", handlers.Mux)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
 }

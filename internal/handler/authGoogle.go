@@ -9,12 +9,6 @@ import (
 	"time"
 )
 
-const (
-	googleAuthURL     = "https://accounts.google.com/o/oauth2/auth"
-	googleTokenURL    = "https://accounts.google.com/o/oauth2/token"
-	googleUserInfoURL = "https://www.googleapis.com/oauth2/v3/userinfo"
-)
-
 type oauth2 struct {
 	ClientID     string
 	ClientSecret string
@@ -27,7 +21,7 @@ type oauth2 struct {
 var googleOAuthConfig = oauth2{
 	ClientID:     "335306634109-u8r0uapc9umk73grgji1099078iaujed.apps.googleusercontent.com",
 	ClientSecret: "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",
-	RedirectURL:  "http://localhost:8080/auth/google/callback",
+	RedirectURL:  "https://localhost:8080/auth/google/callback",
 	// Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
 	// Endpoint: oauth2.Endpoint{
 	AuthURL: "https://accounts.google.com/o/oauth2/auth",
