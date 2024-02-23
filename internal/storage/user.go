@@ -9,6 +9,7 @@ import (
 type User interface {
 	GetUserByToken(token string) (models.User, error)
 	CheckUserByNameEmail(email, username string) (bool, error)
+	UpdateUserName(id int, username string) error
 }
 
 type UserStorage struct {
@@ -44,4 +45,12 @@ func (u *UserStorage) CheckUserByNameEmail(email, username string) (bool, error)
 	}
 
 	return exists, nil
+}
+
+func (u *UserStorage) UpdateUserName(id int, username string) error {
+	query := `UPDATE user SET username = $1 WHERE id= $2;`
+	if _, err := u.db.Exec(query, username, id); err != nil {
+		return err
+	}
+	return nil
 }

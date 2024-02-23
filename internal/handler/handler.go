@@ -22,7 +22,9 @@ func NewHandler(services *service.Service) *Handler {
 }
 
 func (h *Handler) InitRoutes() {
+
 	h.Mux.HandleFunc("/", h.middleWareGetUser(h.homePage))
+	h.Mux.HandleFunc("/profile/", h.middleWareGetUser(h.profilePage))
 	h.Mux.HandleFunc("/about", h.info)
 
 	h.Mux.HandleFunc("/signup", h.signUp)
@@ -48,6 +50,7 @@ func (h *Handler) InitRoutes() {
 	h.Mux.HandleFunc("/delete/comment/", h.middleWareGetUser(h.deleteComment))
 
 	h.Mux.HandleFunc("/comment/", h.middleWareGetUser(h.commentPage))
+
 	h.Mux.HandleFunc("/change/post/", h.middleWareGetUser(h.changePost))
 
 	h.Mux.HandleFunc("/notification/", h.middleWareGetUser(h.notification))

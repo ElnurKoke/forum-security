@@ -26,3 +26,10 @@ type InfoSign struct {
 	RepeatPassword string
 	Email          string
 }
+
+type ProfileInfo struct {
+	User
+	Error       string
+	ProfileUser User
+	Posts       []Post
+}
