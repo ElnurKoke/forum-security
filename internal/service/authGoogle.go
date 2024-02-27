@@ -24,7 +24,7 @@ func (a *AuthService) CreateOrLoginByGoogle(user_g models.GoogleLoginUserData) (
 	user.Username = user_g.Name[:6] + "(" + tokenStr[:8] + ")"
 
 	//check exists Email in db
-	exist, err := a.storage.CheckUserByNameEmail(user.Email, user.Username)
+	exist, err := a.storage.CheckUserByEmail(user.Email)
 	if err != nil {
 		return "", time.Time{}, err
 	}
@@ -33,10 +33,10 @@ func (a *AuthService) CreateOrLoginByGoogle(user_g models.GoogleLoginUserData) (
 		if err != nil {
 			return "", time.Time{}, err
 		}
-		if user2.Username[:6] != user.Username[:6] {
-			fmt.Println("Email already in use!")
-			return "", time.Time{}, err
-		}
+		// if user2.Username[:6] != user.Username[:6] {
+		// 	fmt.Println("Email already in use!")
+		// 	return "", time.Time{}, err
+		// }
 		if err := a.storage.SaveToken(d.String(), expired, user2.Username); err != nil {
 			fmt.Println("google sign in can not save token")
 			return "", time.Time{}, err

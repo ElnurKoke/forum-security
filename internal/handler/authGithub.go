@@ -55,11 +55,8 @@ func (h *Handler) githubCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
-	fmt.Println("found data Githib---------------------------------------------")
-	fmt.Println(" Login:  ", user_data.Login)
-	fmt.Println(" 	Email:  ", user_data.NodeID)
-	fmt.Println(" 	ID:    ", user_data.ID)
-
+	models.InfoLog.Printf("\n        Login: %s\n        Nodel: %s\n        ID:    %d\n        Status:%s\n",
+		user_data.Login, user_data.NodeID, user_data.ID, "OAuth Github")
 	token, expired, err := h.Service.Auth.CreateOrLoginByGithub(user_data)
 	if err != nil {
 		info := models.InfoSign{
@@ -79,7 +76,6 @@ func (h *Handler) githubCallback(w http.ResponseWriter, r *http.Request) {
 		Path:    "/",
 		Expires: expired,
 	})
-	fmt.Println("set token")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 

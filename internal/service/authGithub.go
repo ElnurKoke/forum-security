@@ -33,12 +33,12 @@ func (a *AuthService) CreateOrLoginByGithub(user_g models.GithubUserData) (strin
 		if err != nil {
 			return "", time.Time{}, err
 		}
-		if user2.Username != user.Username {
-			fmt.Println("Email already in use!")
-			return "", time.Time{}, err
-		}
+		// if user2.Username != user.Username {
+		// 	fmt.Println("Email already in use!")
+		// 	return "", time.Time{}, err
+		// }
 		if err := a.storage.SaveToken(tokenStr, expired, user2.Username); err != nil {
-			fmt.Println("google sign in can not save token")
+			fmt.Println("github sign in can not save token")
 			return "", time.Time{}, err
 		}
 		return tokenStr, expired, nil

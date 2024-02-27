@@ -21,14 +21,14 @@ func NewHandler(services *service.Service) *Handler {
 	}
 }
 
-func (h *Handler) InitRoutes() {
+func (h *Handler) InitRoutes() http.Handler {
 
 	h.Mux.HandleFunc("/", h.middleWareGetUser(h.homePage))
 	h.Mux.HandleFunc("/profile/", h.middleWareGetUser(h.profilePage))
-	h.Mux.HandleFunc("/about", h.info)
+	h.Mux.HandleFunc("/about", h.middleWareGetUser(h.info))
 
-	h.Mux.HandleFunc("/signup", h.signUp)
-	h.Mux.HandleFunc("/signin", h.signIn)
+	h.Mux.HandleFunc("/signup", h.middleWareGetUser(h.signUp))
+	h.Mux.HandleFunc("/signin", h.middleWareGetUser(h.signIn))
 
 	h.Mux.HandleFunc("/auth/google", h.googleAuth)
 	h.Mux.HandleFunc("/oauth2callback-google", h.googleAuthCallback)
@@ -59,6 +59,7 @@ func (h *Handler) InitRoutes() {
 	fileServer := http.FileServer(neuteredFileSystem{http.Dir("./front/static/")})
 	h.Mux.Handle("/static", http.NotFoundHandler())
 	h.Mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+	return h.Mux
 }
 
 type neuteredFileSystem struct {

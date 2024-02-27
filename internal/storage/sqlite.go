@@ -2,20 +2,21 @@ package storage
 
 import (
 	"database/sql"
+	"forum/internal/models"
+	"forum/internal/server"
 	"io/ioutil"
-	"log"
 	"path/filepath"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func InitDB() *sql.DB {
-	db, err := sql.Open("sqlite3", "forum.db?_foreign_keys=1")
+func InitDB(config server.Config) *sql.DB {
+	db, err := sql.Open(config.DB.Driver, config.DB.Dsn)
 	if err != nil {
-		log.Fatal(err)
+		models.ErrLog.Fatal(err)
 	}
 	if err = db.Ping(); err != nil {
-		log.Fatal(err)
+		models.ErrLog.Fatal(err)
 	}
 	migrations := []string{"userTable.sql",
 		"postTable.sql",
@@ -27,11 +28,12 @@ func InitDB() *sql.DB {
 	for _, migrationFile := range migrations {
 		content, err := ioutil.ReadFile(filepath.Join("migrations", migrationFile))
 		if err != nil {
-			log.Fatal(err)
+			models.ErrLog.Fatal(err)
 		}
 		if _, err = db.Exec(string(content)); err != nil {
-			log.Fatal(err)
+			models.ErrLog.Fatal(err)
 		}
 	}
+	models.InfoLog.Println("Connection to the database was successful")
 	return db
 }

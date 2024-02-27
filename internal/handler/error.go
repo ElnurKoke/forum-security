@@ -8,6 +8,7 @@ import (
 )
 
 func (h *Handler) ErrorPage(w http.ResponseWriter, message string, status int) {
+	models.ErrLog.Println(message)
 	errData := models.Error{Status: status, StatusText: http.StatusText(status), Message: message}
 	templ, err := template.ParseFiles("./front/html/error.html")
 	if err != nil {

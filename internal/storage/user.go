@@ -9,6 +9,8 @@ import (
 type User interface {
 	GetUserByToken(token string) (models.User, error)
 	CheckUserByNameEmail(email, username string) (bool, error)
+	CheckUserByName(username string) (bool, error)
+	CheckUserByEmail(email string) (bool, error)
 	UpdateUserName(id int, username string) error
 }
 
@@ -37,6 +39,36 @@ func (u *UserStorage) CheckUserByNameEmail(email, username string) (bool, error)
 	query := "SELECT EXISTS(SELECT 1 FROM user WHERE email = ? OR username = ?) AS UE_exists;"
 
 	row := u.db.QueryRow(query, email, username)
+
+	var exists bool
+	err := row.Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+
+	return exists, nil
+}
+
+func (u *UserStorage) CheckUserByName(username string) (bool, error) {
+
+	query := "SELECT EXISTS(SELECT 1 FROM user WHERE username = ?) AS UE_exists;"
+
+	row := u.db.QueryRow(query, username)
+
+	var exists bool
+	err := row.Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+
+	return exists, nil
+}
+
+func (u *UserStorage) CheckUserByEmail(email string) (bool, error) {
+
+	query := "SELECT EXISTS(SELECT 1 FROM user WHERE email = ? ) AS UE_exists;"
+
+	row := u.db.QueryRow(query, email)
 
 	var exists bool
 	err := row.Scan(&exists)

@@ -12,6 +12,7 @@ import (
 func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
 	var posts []models.Post
 	if r.URL.Path != "/" {
+		models.ErrLog.Println(http.StatusNotFound)
 		h.ErrorPage(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	}

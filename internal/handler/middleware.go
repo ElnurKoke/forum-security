@@ -29,6 +29,19 @@ func (h *Handler) middleWareGetUser(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		user.IsAuth = true
-		next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), "user", user)))
+		ticker := time.NewTicker(1 * time.Second)
+		if r.Method != http.MethodGet {
+			// Создаем новый таймер
+
+			defer ticker.Stop() // Важно остановить таймер в конце функции, чтобы избежать утечки памяти
+
+			// Цикл для обработки событий таймера
+			<-ticker.C // Ждем события таймера
+
+			// Продолжаем выполнение запроса
+			next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), "user", user)))
+		} else {
+			next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), "user", user)))
+		}
 	}
 }

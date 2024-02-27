@@ -34,6 +34,7 @@ func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 				h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 				return
 			}
+			models.InfoLog.Printf("URL: %s\n        Method:   %s\n        Message:  %s\n        Status:   %s\n", r.URL.Path, r.Method, err, "fail")
 			return
 		}
 		http.SetCookie(w, &http.Cookie{
@@ -42,6 +43,7 @@ func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 			Path:    "/",
 			Expires: expired,
 		})
+		models.InfoLog.Printf("URL: %s\n        Method:   %s\n        Message:  %s\n        Status:   %s\n", r.URL.Path, r.Method, username, "successful")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	case http.MethodGet:
 

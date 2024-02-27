@@ -35,7 +35,6 @@ func (h *Handler) googleAuth(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) googleAuthCallback(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("start callback")
 	code := r.FormValue("code")
 	pathUrl := "/"
 
@@ -76,10 +75,8 @@ func (h *Handler) googleAuthCallback(w http.ResponseWriter, r *http.Request) {
 		UpdatedAt: now,
 	}
 
-	fmt.Println(" Name:  ", user_data.Name)
-	fmt.Println(" 	Email:  ", user_data.Email)
-	fmt.Println(" 	Photo:    ", user_data.Photo)
-	fmt.Println(" 	Provider:  ", user_data.Provider)
+	models.InfoLog.Printf("\n        Name:  %s\n        Email: %s\n        Photo: %s\n        Status:%s\n",
+		user_data.Name, user_data.Email, user_data.Photo, "OAuth Google")
 	token, expired, err := h.Service.Auth.CreateOrLoginByGoogle(user_data)
 	if err != nil {
 		info := models.InfoSign{
@@ -99,7 +96,6 @@ func (h *Handler) googleAuthCallback(w http.ResponseWriter, r *http.Request) {
 		Path:    "/",
 		Expires: expired,
 	})
-	fmt.Println("set token")
 	http.Redirect(w, r, pathUrl, http.StatusSeeOther)
 }
 

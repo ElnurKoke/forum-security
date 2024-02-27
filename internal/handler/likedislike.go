@@ -39,6 +39,7 @@ func (h *Handler) emotionComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !user.IsAuth {
+		models.ErrLog.Println(http.StatusUnauthorized)
 		h.ErrorPage(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
